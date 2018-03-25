@@ -1,5 +1,5 @@
 # LittleRestClient 
-[![Build Status](https://travis-ci.org/EldieTurner/RestClient.svg?branch=master)](https://travis-ci.org/EldieTurner/RestClient)
+[![Build Status](https://travis-ci.org/EldieTurner/LittleRestClient.svg?branch=master)](https://travis-ci.org/EldieTurner/LittleRestClient)
 
 Working on an easy rest client compatible with .net core and standard 2.0.  It isn't designed to be a verbose solution.  If you just need to do basic calls to an api this should work great.
 
