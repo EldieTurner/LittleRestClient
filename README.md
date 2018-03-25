@@ -22,13 +22,16 @@ The simplest way to use LittleRestClient is pass the api's base url into the con
 var restClient = new RestClient("http://example.com/api/");
 ```
 
-There is also a constructor that takes an `IRestClientConfig` object.  This object has the following properties.
+There is also a constructor that takes an `IRestClientConfig` object.  You can implement this interface, and pass it into the constructor.
 ```csharp
+    public interface IRestClientConfig
+    {
         string BaseUrl { get; } //Required eg "Https://example.com/api/"
         string ApiToken { get; } //Blank by default
         string UserAgent { get; } //"LittleRestClient"
         string ContentType { get; } //"application/json"
-       string AcceptType { get; } //"application/json"
+        string AcceptType { get; } //"application/json"
+    }
 ```
 
 The only proeprty that is required is `BaseUrl`
@@ -36,11 +39,18 @@ The only proeprty that is required is `BaseUrl`
 ## Public Methods
 All public methods are `Async` so they are all wrapped in a `Task`.  Also all public methods other than `GetStringAsync` return a `RestClientResponse` or `RestClientResponse<TResult>` object depending on the response expected. These objects have the following properties 
 ```csharp
+    public class RestClientResponse
+    {
         public virtual HttpResponseHeaders Headers { get; internal set; }
         public virtual bool IsSuccessStatusCode { get; internal set; }
         public virtual HttpStatusCode StatusCode { get; internal set; }
         public virtual string ReasonPhrase { get; internal set; }
-        public virtual TResult Data { get; internal set; } //only if expecting a response body
+    }
+        //Or if you are expecting data back.
+    public class RestClientResponse<TResult> : RestClientResponse
+    {
+        public virtual TResult Data { get; internal set; }
+    }
 ```
 
 ### GetStringAsync
