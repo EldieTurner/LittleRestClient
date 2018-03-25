@@ -1,0 +1,6 @@
+language: csharp
+mono: none
+dotnet: 2.0.0
+script:
+ - dotnet build RestClient.sln
+ - dotnet test ./UnitTestProject/UnitTestProject.csproj /p:CollectCoverage=true
