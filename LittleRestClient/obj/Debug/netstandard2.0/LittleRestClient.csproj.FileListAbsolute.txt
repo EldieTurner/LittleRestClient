@@ -1,9 +1,0 @@
-D:\Projects\LittleRestClient\LittleRestClient\bin\Debug\netstandard2.0\LittleRestClient.deps.json
-D:\Projects\LittleRestClient\LittleRestClient\bin\Debug\netstandard2.0\LittleRestClient.dll
-D:\Projects\LittleRestClient\LittleRestClient\obj\Debug\netstandard2.0\LittleRestClient.csprojResolveAssemblyReference.cache
-D:\Projects\LittleRestClient\LittleRestClient\obj\Debug\netstandard2.0\LittleRestClient.csproj.CoreCompileInputs.cache
-D:\Projects\LittleRestClient\LittleRestClient\obj\Debug\netstandard2.0\LittleRestClient.AssemblyInfoInputs.cache
-D:\Projects\LittleRestClient\LittleRestClient\obj\Debug\netstandard2.0\LittleRestClient.AssemblyInfo.cs
-D:\Projects\LittleRestClient\LittleRestClient\bin\Debug\netstandard2.0\LittleRestClient.pdb
-D:\Projects\LittleRestClient\LittleRestClient\obj\Debug\netstandard2.0\LittleRestClient.dll
-D:\Projects\LittleRestClient\LittleRestClient\obj\Debug\netstandard2.0\LittleRestClient.pdb
