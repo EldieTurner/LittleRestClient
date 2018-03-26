@@ -33,5 +33,18 @@ namespace UnitTestProject
             //Assert
             Assert.AreEqual(url, client.HttpClient.BaseAddress.ToString());
         }
+
+        [TestMethod]
+        public void Standard_Constructor_Test()
+        {
+            //Arrange
+            var config = new TestRestConfig {BaseUrl = "http://example.com/api"};
+
+            //Act
+            var client = new TestRestClient(config);
+
+            //Assert
+            Assert.AreEqual(config.BaseUrl, client.HttpClient.BaseAddress.ToString());
+        }
     }
 }
