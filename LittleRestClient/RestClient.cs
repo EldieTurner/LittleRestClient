@@ -11,10 +11,10 @@ namespace LittleRestClient
     {
         private const string PATCH = nameof(PATCH);
         private readonly string _contenttype;
-        private readonly IHttpClient _httpClient;
         private readonly DefaultRestClientConfig _defaultConfig = new DefaultRestClientConfig();
 
         protected readonly IRestClientConfig Config;
+        protected readonly IHttpClient _httpClient;
 
         public RestClient(string baseUrl)
         {

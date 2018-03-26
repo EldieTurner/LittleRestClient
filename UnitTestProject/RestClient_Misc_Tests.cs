@@ -20,5 +20,18 @@ namespace UnitTestProject
             var config = new Mock<IRestClientConfig>();
             Assert.ThrowsException<ArgumentException>(() => new RestClient(config.Object));
         }
+
+        [TestMethod]
+        public void Simple_Constructor_Test()
+        {
+            //Arrange
+            var url = "http://example.com/api";
+
+            //Act
+            var client = new TestRestClient(url);
+
+            //Assert
+            Assert.AreEqual(url, client.HttpClient.BaseAddress.ToString());
+        }
     }
 }
