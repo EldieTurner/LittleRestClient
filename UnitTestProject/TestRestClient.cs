@@ -5,7 +5,7 @@ namespace UnitTestProject
     internal class TestRestClient : RestClient
     {
         public IRestClientConfig RestConfig => Config;
-        public IHttpClient HttpClient => _httpClient;
+        public IHttpClient HttpClient => base.HttpClient;
 
         internal TestRestClient(IRestClientConfig config, IHttpClient httpClient) : base(config, httpClient){}
         internal TestRestClient(IRestClientConfig config) : base(config) { }
