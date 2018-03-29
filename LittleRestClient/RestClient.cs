@@ -46,14 +46,7 @@ namespace LittleRestClient
             HttpClient.BaseAddress = new Uri(Config.BaseUrl);
             Addheaders();
         }
-        public virtual async Task<RestClientResponse<TResult>> GetAsync<TResult>(string route)
-        {
-            using (var response = HttpClient.GetAsync(route))
-            {
-                return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
-            }
-        }
-        public virtual async Task<RestClientResponse<TResult>> GetAsync<TResult>(string route, CancellationToken cancellationToken)
+        public virtual async Task<RestClientResponse<TResult>> GetAsync<TResult>(string route, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var response = HttpClient.GetAsync(route, cancellationToken))
             {
@@ -62,15 +55,7 @@ namespace LittleRestClient
         }
         public virtual Task<string> GetStringAsync(string route)
             => HttpClient.GetStringAsync(route);
-        public virtual async Task<RestClientResponse<TResult>> PostAsync<TBody, TResult>(string route, TBody body)
-        {
-            var content = CreateRequestContent(body);
-            using (var response = HttpClient.PostAsync(route, content))
-            {
-                return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
-            }
-        }
-        public async Task<RestClientResponse<TResult>> PostAsync<TBody, TResult>(string route, TBody body, CancellationToken cancellationToken)
+        public async Task<RestClientResponse<TResult>> PostAsync<TBody, TResult>(string route, TBody body, CancellationToken cancellationToken = default(CancellationToken))
         {
             var content = CreateRequestContent(body);
             using (var response = HttpClient.PostAsync(route, content, cancellationToken))
@@ -78,15 +63,7 @@ namespace LittleRestClient
                 return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
             }
         }
-        public virtual async Task<RestClientResponse> PostAsync<TBody>(string route, TBody body)
-        {
-            var content = CreateRequestContent(body);
-            using (var response = await HttpClient.PostAsync(route, content).ConfigureAwait(false))
-            {
-                return GetRestClientResponse(response);
-            }
-        }
-        public virtual async Task<RestClientResponse> PostAsync<TBody>(string route, TBody body, CancellationToken cancellationToken)
+        public virtual async Task<RestClientResponse> PostAsync<TBody>(string route, TBody body, CancellationToken cancellationToken = default(CancellationToken))
         {
             var content = CreateRequestContent(body);
             using (var response = await HttpClient.PostAsync(route, content, cancellationToken).ConfigureAwait(false))
@@ -94,15 +71,7 @@ namespace LittleRestClient
                 return GetRestClientResponse(response);
             }
         }
-        public virtual async Task<RestClientResponse<TResult>> PutAsync<TBody, TResult>(string route, TBody body)
-        {
-            var content = CreateRequestContent(body);
-            using (var response = HttpClient.PutAsync(route, content))
-            {
-                return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
-            }
-        }
-        public virtual async Task<RestClientResponse<TResult>> PutAsync<TBody, TResult>(string route, TBody body, CancellationToken cancellationToken)
+        public virtual async Task<RestClientResponse<TResult>> PutAsync<TBody, TResult>(string route, TBody body, CancellationToken cancellationToken = default(CancellationToken))
         {
             var content = CreateRequestContent(body);
             using (var response = HttpClient.PutAsync(route, content, cancellationToken))
@@ -110,15 +79,7 @@ namespace LittleRestClient
                 return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
             }
         }
-        public virtual async Task<RestClientResponse> PutAsync<TBody>(string route, TBody body)
-        {
-            var content = CreateRequestContent(body);
-            using (var response = await HttpClient.PutAsync(route, content).ConfigureAwait(false))
-            {
-                return GetRestClientResponse(response);
-            }
-        }
-        public virtual async Task<RestClientResponse> PutAsync<TBody>(string route, TBody body, CancellationToken cancellationToken)
+        public virtual async Task<RestClientResponse> PutAsync<TBody>(string route, TBody body, CancellationToken cancellationToken = default(CancellationToken))
         {
             var content = CreateRequestContent(body);
             using (var response = await HttpClient.PutAsync(route, content, cancellationToken).ConfigureAwait(false))
@@ -126,15 +87,7 @@ namespace LittleRestClient
                 return GetRestClientResponse(response);
             }
         }
-        public virtual async Task<RestClientResponse<TResult>> PatchAsync<TBody, TResult>(string route, TBody body)
-        {
-            var request = GetPatchHttpRequestMessage(route, body);
-            using (var response = HttpClient.SendAsync(request))
-            {
-                return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
-            }
-        }
-        public virtual async Task<RestClientResponse<TResult>> PatchAsync<TBody, TResult>(string route, TBody body, CancellationToken cancellationToken)
+        public virtual async Task<RestClientResponse<TResult>> PatchAsync<TBody, TResult>(string route, TBody body, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = GetPatchHttpRequestMessage(route, body);
             using (var response = HttpClient.SendAsync(request, cancellationToken))
@@ -142,15 +95,7 @@ namespace LittleRestClient
                 return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
             }
         }
-        public virtual async Task<RestClientResponse> PatchAsync<TBody>(string route, TBody body)
-        {
-            var request = GetPatchHttpRequestMessage(route, body);
-            using (var response = await HttpClient.SendAsync(request).ConfigureAwait(false))
-            {
-                return GetRestClientResponse(response);
-            }
-        }
-        public virtual async Task<RestClientResponse> PatchAsync<TBody>(string route, TBody body, CancellationToken cancellationToken)
+        public virtual async Task<RestClientResponse> PatchAsync<TBody>(string route, TBody body, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = GetPatchHttpRequestMessage(route, body);
             using (var response = await HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
@@ -158,28 +103,14 @@ namespace LittleRestClient
                 return GetRestClientResponse(response);
             }
         }
-        public virtual async Task<RestClientResponse<TResult>> DeleteAsync<TResult>(string route)
-        {
-            using (var response = HttpClient.DeleteAsync(route))
-            {
-                return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
-            }
-        }
-        public virtual async Task<RestClientResponse<TResult>> DeleteAsync<TResult>(string route, CancellationToken cancellationToken)
+        public virtual async Task<RestClientResponse<TResult>> DeleteAsync<TResult>(string route, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var response = HttpClient.DeleteAsync(route, cancellationToken))
             {
                 return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
             }
         }
-        public virtual async Task<RestClientResponse> DeleteAsync(string route)
-        {
-            using (var response = await HttpClient.DeleteAsync(route).ConfigureAwait(false))
-            {
-                return GetRestClientResponse(response);
-            }
-        }
-        public virtual async Task<RestClientResponse> DeleteAsync(string route, CancellationToken cancellationToken)
+        public virtual async Task<RestClientResponse> DeleteAsync(string route, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var response = await HttpClient.DeleteAsync(route, cancellationToken).ConfigureAwait(false))
             {

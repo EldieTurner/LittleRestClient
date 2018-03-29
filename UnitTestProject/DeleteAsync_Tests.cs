@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
+using System.Threading;
 using LittleRestClient;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -17,7 +18,7 @@ namespace UnitTestProject
             var content = new StringContent(testObject.ToJsonString());
             var httpClientResponse = new HttpResponseMessage(HttpStatusCode.OK) { Content = content };
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.DeleteAsync(It.IsAny<string>()))
+            httpClient.Setup(x => x.DeleteAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(httpClientResponse);
             var config = new TestRestConfig();
             var client = new TestRestClient(config, httpClient.Object);
@@ -37,7 +38,7 @@ namespace UnitTestProject
             //Arrange
             var httpClientResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError);
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.DeleteAsync(It.IsAny<string>()))
+            httpClient.Setup(x => x.DeleteAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(httpClientResponse);
             var config = new TestRestConfig();
             var client = new TestRestClient(config, httpClient.Object);
@@ -59,7 +60,7 @@ namespace UnitTestProject
             var testObject = new SimpleTestObject { TestProperty = "Test Value", TestProperty2 = 2 };
             var httpClientResponse = new HttpResponseMessage(HttpStatusCode.OK);
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.DeleteAsync(It.IsAny<string>()))
+            httpClient.Setup(x => x.DeleteAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(httpClientResponse);
             var config = new TestRestConfig();
             var client = new TestRestClient(config, httpClient.Object);
@@ -79,7 +80,7 @@ namespace UnitTestProject
             //Arrange
             var httpClientResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError);
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.DeleteAsync(It.IsAny<string>()))
+            httpClient.Setup(x => x.DeleteAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(httpClientResponse);
             var config = new TestRestConfig();
             var client = new TestRestClient(config, httpClient.Object);
