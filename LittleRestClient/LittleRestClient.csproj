@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.2.0.0</Version>
+    <Version>1.2.1.1</Version>
     <Authors>Eldie Turner</Authors>
     <Company>Eldie Turner</Company>
     <Description>This is a basic rest client for interacting with APIs.  It offers the basic functions and is compatable with .net standard 2.0 and .net core 2.0.</Description>
@@ -11,6 +11,7 @@
     <RepositoryType>Git</RepositoryType>
     <PackageTags>RestClient, Little Rest Client, Easy Rest Client, SImple Rest Client,</PackageTags>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <AssemblyVersion>1.2.1.11</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
