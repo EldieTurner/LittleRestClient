@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -14,7 +15,7 @@ namespace LittleRestClient
         private readonly DefaultRestClientConfig _defaultConfig = new DefaultRestClientConfig();
 
         protected readonly IRestClientConfig Config;
-        protected readonly IHttpClient _httpClient;
+        protected readonly IHttpClient HttpClient;
 
         public RestClient(string baseUrl)
         {
@@ -24,7 +25,7 @@ namespace LittleRestClient
             _defaultConfig.BaseUrl = baseUrl;
             Config = _defaultConfig;
             _contenttype = Config.ContentType.WhiteSpaceIsNull() ?? _defaultConfig.ContentType;
-            _httpClient = new HttpClientWrapper {BaseAddress = new Uri(Config.BaseUrl)};
+            HttpClient = new HttpClientWrapper {BaseAddress = new Uri(Config.BaseUrl)};
             Addheaders();
         }
         public RestClient(IRestClientConfig config) : this(config, new HttpClientWrapper()){}
@@ -39,96 +40,94 @@ namespace LittleRestClient
             if(config.BaseUrl.IsNullOrWhiteSpace())
                  throw new ArgumentException($"{nameof(IRestClientConfig.BaseUrl)} is required");
             
-            _httpClient = httpClient ?? new HttpClientWrapper();
+            HttpClient = httpClient ?? new HttpClientWrapper();
             Config = config;
             _contenttype = Config.ContentType.WhiteSpaceIsNull() ?? _defaultConfig.ContentType;
-            _httpClient.BaseAddress = new Uri(Config.BaseUrl);
+            HttpClient.BaseAddress = new Uri(Config.BaseUrl);
             Addheaders();
         }
-        public virtual async Task<RestClientResponse<TResult>> GetAsync<TResult>(string route)
+        public virtual async Task<RestClientResponse<TResult>> GetAsync<TResult>(string route, CancellationToken cancellationToken = default(CancellationToken))
         {
-            using (var response = _httpClient.GetAsync(route))
+            using (var response = HttpClient.GetAsync(route, cancellationToken))
             {
                 return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
             }
         }
         public virtual Task<string> GetStringAsync(string route)
-            => _httpClient.GetStringAsync(route);
-        public virtual async Task<RestClientResponse<TResult>> PostAsync<TBody, TResult>(string route, TBody body)
+            => HttpClient.GetStringAsync(route);
+        public async Task<RestClientResponse<TResult>> PostAsync<TBody, TResult>(string route, TBody body, CancellationToken cancellationToken = default(CancellationToken))
         {
             var content = CreateRequestContent(body);
-            using (var response = _httpClient.PostAsync(route, content))
+            using (var response = HttpClient.PostAsync(route, content, cancellationToken))
             {
                 return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
             }
         }
-        public virtual async Task<RestClientResponse> PostAsync<TBody>(string route, TBody body)
+        public virtual async Task<RestClientResponse> PostAsync<TBody>(string route, TBody body, CancellationToken cancellationToken = default(CancellationToken))
         {
             var content = CreateRequestContent(body);
-            using (var response = await _httpClient.PostAsync(route, content).ConfigureAwait(false))
+            using (var response = await HttpClient.PostAsync(route, content, cancellationToken).ConfigureAwait(false))
             {
                 return GetRestClientResponse(response);
             }
         }
-        public virtual async Task<RestClientResponse<TResult>> PutAsync<TBody, TResult>(string route, TBody body)
+        public virtual async Task<RestClientResponse<TResult>> PutAsync<TBody, TResult>(string route, TBody body, CancellationToken cancellationToken = default(CancellationToken))
         {
             var content = CreateRequestContent(body);
-            using (var response = _httpClient.PutAsync(route, content))
+            using (var response = HttpClient.PutAsync(route, content, cancellationToken))
             {
                 return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
             }
         }
-        public virtual async Task<RestClientResponse> PutAsync<TBody>(string route, TBody body)
+        public virtual async Task<RestClientResponse> PutAsync<TBody>(string route, TBody body, CancellationToken cancellationToken = default(CancellationToken))
         {
             var content = CreateRequestContent(body);
-            using (var response = await _httpClient.PutAsync(route, content).ConfigureAwait(false))
+            using (var response = await HttpClient.PutAsync(route, content, cancellationToken).ConfigureAwait(false))
             {
                 return GetRestClientResponse(response);
             }
         }
-        public virtual async Task<RestClientResponse<TResult>> PatchAsync<TBody, TResult>(string route, TBody body)
+        public virtual async Task<RestClientResponse<TResult>> PatchAsync<TBody, TResult>(string route, TBody body, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = GetPatchHttpRequestMessage(route, body);
-            using (var response = _httpClient.SendAsync(request))
+            using (var response = HttpClient.SendAsync(request, cancellationToken))
             {
                 return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
             }
         }
-        public virtual async Task<RestClientResponse> PatchAsync<TBody>(string route, TBody body)
+        public virtual async Task<RestClientResponse> PatchAsync<TBody>(string route, TBody body, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = GetPatchHttpRequestMessage(route, body);
-            using (var response = await _httpClient.SendAsync(request).ConfigureAwait(false))
+            using (var response = await HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
             {
                 return GetRestClientResponse(response);
             }
         }
-        public virtual async Task<RestClientResponse<TResult>> DeleteAsync<TResult>(string route)
+        public virtual async Task<RestClientResponse<TResult>> DeleteAsync<TResult>(string route, CancellationToken cancellationToken = default(CancellationToken))
         {
-            using (var response = _httpClient.DeleteAsync(route))
+            using (var response = HttpClient.DeleteAsync(route, cancellationToken))
             {
                 return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
             }
         }
-        public virtual async Task<RestClientResponse> DeleteAsync(string route)
+        public virtual async Task<RestClientResponse> DeleteAsync(string route, CancellationToken cancellationToken = default(CancellationToken))
         {
-            using (var response = await _httpClient.DeleteAsync(route).ConfigureAwait(false))
+            using (var response = await HttpClient.DeleteAsync(route, cancellationToken).ConfigureAwait(false))
             {
                 return GetRestClientResponse(response);
             }
         }
         protected void Addheaders()
         {
-            if (_httpClient.DefaultRequestHeaders == null) return;
+            if (HttpClient.DefaultRequestHeaders == null) return;
 
             var userAgent = !Config.UserAgent.IsNullOrWhiteSpace() ? Config.UserAgent : _defaultConfig.UserAgent;
             var acceptType = !Config.AcceptType.IsNullOrWhiteSpace() ? Config.AcceptType : _defaultConfig.AcceptType;
-            _httpClient.DefaultRequestHeaders.Accept.Clear();
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(acceptType));
-            _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", _contenttype);
-            CacheControlHeaderValue cacheControl = new CacheControlHeaderValue { NoCache = true };
-            _httpClient.DefaultRequestHeaders.CacheControl = cacheControl;
-            if (!Config.ApiToken.IsNullOrWhiteSpace()) _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Config.ApiToken);
+            HttpClient.DefaultRequestHeaders.Accept.Clear();
+            HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
+            HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(acceptType));
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", _contenttype);
+            if (!Config.ApiToken.IsNullOrWhiteSpace()) HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Config.ApiToken);
         }
         protected virtual HttpRequestMessage GetPatchHttpRequestMessage<TBody>(string route, TBody body)
         {
@@ -169,6 +168,6 @@ namespace LittleRestClient
             }
             return restClientResponse;
         }
-        public virtual void Dispose() => _httpClient.Dispose();
+        public virtual void Dispose() => HttpClient.Dispose();
     }
 }

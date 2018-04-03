@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using LittleRestClient;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -19,7 +20,7 @@ namespace UnitTestProject
             var content = new StringContent(testObject.ToJsonString());
             var httpClientResponse = new HttpResponseMessage(HttpStatusCode.OK) { Content = content };
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.SendAsync(It.IsAny<HttpRequestMessage>()))
+            httpClient.Setup(x => x.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(httpClientResponse);
             var config = new TestRestConfig();
             var restClient = new TestRestClient(config, httpClient.Object);
@@ -40,7 +41,7 @@ namespace UnitTestProject
             var testObject = new SimpleTestObject { TestProperty = "Test Value", TestProperty2 = 2 };
             var httpClientResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError) { Content = null };
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.SendAsync(It.IsAny<HttpRequestMessage>()))
+            httpClient.Setup(x => x.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(httpClientResponse);
             var config = new TestRestConfig();
             var restClient = new TestRestClient(config, httpClient.Object);
@@ -62,7 +63,7 @@ namespace UnitTestProject
             var testObject = new SimpleTestObject { TestProperty = "Test Value", TestProperty2 = 2 };
             var httpClientResponse = new HttpResponseMessage(HttpStatusCode.OK);
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.SendAsync(It.IsAny<HttpRequestMessage>()))
+            httpClient.Setup(x => x.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(httpClientResponse);
             var config = new TestRestConfig();
             var restClient = new TestRestClient(config, httpClient.Object);
@@ -83,7 +84,7 @@ namespace UnitTestProject
             var testObject = new SimpleTestObject { TestProperty = "Test Value", TestProperty2 = 2 };
             var httpClientResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError);
             var httpClient = new Mock<IHttpClient>();
-            httpClient.Setup(x => x.SendAsync(It.IsAny<HttpRequestMessage>()))
+            httpClient.Setup(x => x.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(httpClientResponse);
             var config = new TestRestConfig();
             var restClient = new TestRestClient(config, httpClient.Object);
