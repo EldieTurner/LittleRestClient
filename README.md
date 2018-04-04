@@ -64,7 +64,7 @@ Notice that the route is just what you need to add to the base url to complete t
 
 ### GetAsync< TResult>
 
-This method will do a `GET` to the endpoint described in the `route`. It takes a generic that describes what kind of object the method should deserialize the data into.
+This method will do a `GET` to the endpoint described in the `route`. It takes a generic that describes what kind of object the method should deserialize the data into. The method can also take a `CancellationToken`.
 
 ```csharp
 string route = $"users/{userId}";
@@ -73,7 +73,7 @@ User user = response.Data;
 ```
 ### PostAsync< TBody>
 
-This method will do a `POST` to the endpoint described in the `route`. It takes an object `body` that it will serialize and send. The response doesn't contain a payload only the call status. 
+This method will do a `POST` to the endpoint described in the `route`. It takes an object `body` that it will serialize and send. The response doesn't contain a payload only the call status. The method can also take a `CancellationToken`.
 
 ```csharp
 string route = $"users";
@@ -84,7 +84,7 @@ return response.IsSuccessStatusCode;
 
 ### PostAsync<TBody,TResult>
 
-This method will do a `POST` to the endpoint described in the `route`. It takes an object `body` that it will serialize and send. The response contain a payload that will be deserialized into a `TResult` object in the `data` field of the `RestClientResponse`. 
+This method will do a `POST` to the endpoint described in the `route`. It takes an object `body` that it will serialize and send. The response contain a payload that will be deserialized into a `TResult` object in the `data` field of the `RestClientResponse`. The method can also take a `CancellationToken`.
 
 ```csharp
 string route = $"users";
@@ -95,7 +95,7 @@ UserInfo userInfo = response.Data;
 
 ### PutAsync< TBody>
   
-This method will do a `PUT` to the endpoint described in the `route`. It takes an object `body` that it will serialize and send. The response doesn't contain a payload only the call status. 
+This method will do a `PUT` to the endpoint described in the `route`. It takes an object `body` that it will serialize and send. The response doesn't contain a payload only the call status. The method can also take a `CancellationToken`.
 
 ```csharp
 string route = $"users/{userId}";
@@ -105,7 +105,7 @@ return response.IsSuccessStatusCode;
   
 ### PutAsync<TBody,TResult>
 
-TThis method will do a `PUT` to the endpoint described in the `route`. It takes an object `body` that it will serialize and send. The response contain a payload that will be deserialized into a `TResult` object in the `data` field of the `RestClientResponse`. 
+TThis method will do a `PUT` to the endpoint described in the `route`. It takes an object `body` that it will serialize and send. The response contain a payload that will be deserialized into a `TResult` object in the `data` field of the `RestClientResponse`. The method can also take a `CancellationToken`.
 
 ```csharp
 string route = $"users/{userId}";
@@ -115,7 +115,7 @@ UserInfo userInfo = response.Data;
 
 ### PatchAsync< TBody>
 
-This method will do a `PATCH` to the endpoint described in the `route`. It takes an object `body` that it will serialize and send. The response doesn't contain a payload only the call status. 
+This method will do a `PATCH` to the endpoint described in the `route`. It takes an object `body` that it will serialize and send. The response doesn't contain a payload only the call status. The method can also take a `CancellationToken`.
 
 ```csharp
 string route = $"users/{userId}";
@@ -125,7 +125,7 @@ return response.IsSuccessStatusCode;
 
 ### PatchAsync<TBody,TResult>
 
-TThis method will do a `PATCH` to the endpoint described in the `route`. It takes an object `body` that it will serialize and send. The response contain a payload that will be deserialized into a `TResult` object in the `data` field of the `RestClientResponse`. 
+TThis method will do a `PATCH` to the endpoint described in the `route`. It takes an object `body` that it will serialize and send. The response contain a payload that will be deserialized into a `TResult` object in the `data` field of the `RestClientResponse`. The method can also take a `CancellationToken`.
 
 ```csharp
 string route = $"users/{userId}";
@@ -135,7 +135,7 @@ UserInfo userInfo = response.Data;
 
 ### DeleteAsync
 
-This method will do a `DELETE` to the endpoint described in the `route`. It doesn't send or receive a payload.  The response only contains the call status. 
+This method will do a `DELETE` to the endpoint described in the `route`. It doesn't send or receive a payload.  The response only contains the call status. The method can also take a `CancellationToken`.
 
 ```csharp
 string route = $"users/{userId}";
@@ -145,7 +145,7 @@ return response.IsSuccessStatusCode;
 
 ### DeleteAsync< TResult>
 
-TThis method will do a `DELETE` to the endpoint described in the `route`. It doesn't send a payload. The response contain a payload that will be deserialized into a `TResult` object in the `data` field of the `RestClientResponse`. 
+TThis method will do a `DELETE` to the endpoint described in the `route`. It doesn't send a payload. The response contain a payload that will be deserialized into a `TResult` object in the `data` field of the `RestClientResponse`. The method can also take a `CancellationToken`.
 
 ```csharp
 string route = $"users/{userId}";
