@@ -25,7 +25,7 @@ namespace LittleRestClient
             _defaultConfig.BaseUrl = baseUrl;
             Config = _defaultConfig;
             _contenttype = Config.ContentType.WhiteSpaceIsNull() ?? _defaultConfig.ContentType;
-            HttpClient = new HttpClientWrapper {BaseAddress = new Uri(Config.BaseUrl)};
+           HttpClient = new HttpClientWrapper {BaseAddress = new Uri(Config.BaseUrl)};
             Addheaders();
         }
         public RestClient(IRestClientConfig config) : this(config, new HttpClientWrapper()){}
