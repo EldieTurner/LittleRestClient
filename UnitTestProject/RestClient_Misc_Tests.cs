@@ -9,7 +9,7 @@ namespace UnitTestProject
     public class RestClient_Misc_Tests
     {
         [TestMethod]
-        public void Empty_Url_Test()
+            public void Empty_Url_Test()
         {
             Assert.ThrowsException<ArgumentException>(() => new RestClient(""));
         }

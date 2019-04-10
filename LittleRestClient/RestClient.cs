@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -26,6 +26,7 @@ namespace LittleRestClient
             Config = _defaultConfig;
             _contenttype = Config.ContentType.WhiteSpaceIsNull() ?? _defaultConfig.ContentType;
             HttpClient = new HttpClientWrapper {BaseAddress = new Uri(Config.BaseUrl)};
+            _contenttype = _contenttype.Trim();
             Addheaders();
         }
         public RestClient(IRestClientConfig config) : this(config, new HttpClientWrapper()){}
@@ -44,6 +45,7 @@ namespace LittleRestClient
             Config = config;
             _contenttype = Config.ContentType.WhiteSpaceIsNull() ?? _defaultConfig.ContentType;
             HttpClient.BaseAddress = new Uri(Config.BaseUrl);
+            _contenttype = _contenttype.Trim();
             Addheaders();
         }
         public virtual async Task<RestClientResponse<TResult>> GetAsync<TResult>(string route, CancellationToken cancellationToken = default(CancellationToken))

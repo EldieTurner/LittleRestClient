@@ -10,7 +10,7 @@ namespace UnitTestProject
 
         public string UserAgent { get; }
 
-        public string ContentType { get; }
+        public string ContentType { get; set; }
 
         public string AcceptType { get; }
     }

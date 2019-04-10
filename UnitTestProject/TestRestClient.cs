@@ -1,14 +1,15 @@
 ﻿using LittleRestClient;
+using System.Linq;
 
 namespace UnitTestProject
 {
     internal class TestRestClient : RestClient
     {
-        public IRestClientConfig RestConfig => Config;
-        public IHttpClient HttpClient => base.HttpClient;
+        internal IRestClientConfig RestConfig => Config;
+        internal IHttpClient HttpClient => base.HttpClient;
 
-        internal TestRestClient(IRestClientConfig config, IHttpClient httpClient) : base(config, httpClient){}
+        internal TestRestClient(IRestClientConfig config, IHttpClient httpClient) : base(config, httpClient) { }
         internal TestRestClient(IRestClientConfig config) : base(config) { }
-        internal TestRestClient(string baseUrl) : base(baseUrl){}
+        internal TestRestClient(string baseUrl) : base(baseUrl) { }
     }
 }

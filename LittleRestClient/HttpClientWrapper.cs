@@ -10,7 +10,13 @@ namespace LittleRestClient
     [ExcludeFromCoverage]
     internal class HttpClientWrapper : IHttpClient
     {
-        private readonly HttpClient _httpClient = new HttpClient();
+        public HttpClientWrapper() 
+            => _httpClient = new HttpClient();
+        
+        public HttpClientWrapper(HttpClient httpClient) 
+            => _httpClient = httpClient;
+        
+        private readonly HttpClient _httpClient;
         public Uri BaseAddress { get => _httpClient.BaseAddress; set => _httpClient.BaseAddress = value; }
 
         public HttpRequestHeaders DefaultRequestHeaders => _httpClient.DefaultRequestHeaders;

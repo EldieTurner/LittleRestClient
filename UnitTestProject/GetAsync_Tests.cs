@@ -34,7 +34,7 @@ namespace UnitTestProject
 
         [TestMethod]
         public void GetAsync_Sad_Test()
-        {
+        {   
             //Arrange
             var httpClientResponse = new HttpResponseMessage(HttpStatusCode.InternalServerError);
             var httpClient = new Mock<IHttpClient>();
