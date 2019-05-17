@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.JsonPatch;
 using Newtonsoft.Json;
 
 namespace LittleRestClient
@@ -11,6 +12,7 @@ namespace LittleRestClient
     public class RestClient : IRestClient
     {
         private const string PATCH = nameof(PATCH);
+        private const string PATCHDOCCONTENTTYPE = "application/json-patch+json";
         private readonly string _contenttype;
         private readonly DefaultRestClientConfig _defaultConfig = new DefaultRestClientConfig();
 
@@ -87,6 +89,22 @@ namespace LittleRestClient
                 return GetRestClientResponse(response);
             }
         }
+        public virtual async Task<RestClientResponse<TResult>> PatchAsync<TModel, TResult>(string route, JsonPatchDocument<TModel> patchDocument, CancellationToken cancellationToken = default) where TModel : class
+        {
+            var request = GetPatchDocumentHttpRequestMessage(route, patchDocument);
+            using (var response = HttpClient.SendAsync(request, cancellationToken))
+            {
+                return await GetRestClientResponseAsync<TResult>(response).ConfigureAwait(false);
+            }
+        }
+        public virtual async Task<RestClientResponse> PatchAsync<TModel>(string route, JsonPatchDocument<TModel> patchDocument, CancellationToken cancellationToken = default) where TModel : class
+        {
+            var request = GetPatchDocumentHttpRequestMessage(route, patchDocument);
+            using (var response = await HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
+            {
+                return GetRestClientResponse(response);
+            }
+        }
         public virtual async Task<RestClientResponse<TResult>> PatchAsync<TBody, TResult>(string route, TBody body, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = GetPatchHttpRequestMessage(route, body);
@@ -120,7 +138,7 @@ namespace LittleRestClient
         protected void Addheaders()
         {
             if (HttpClient.DefaultRequestHeaders == null) return;
-
+             
             var userAgent = !Config.UserAgent.IsNullOrWhiteSpace() ? Config.UserAgent : _defaultConfig.UserAgent;
             var acceptType = !Config.AcceptType.IsNullOrWhiteSpace() ? Config.AcceptType : _defaultConfig.AcceptType;
             HttpClient.DefaultRequestHeaders.Accept.Clear();
@@ -135,6 +153,16 @@ namespace LittleRestClient
             var content = CreateRequestContent(body);
             return new HttpRequestMessage(method, route) { Content = content };
         }
+
+        protected virtual HttpRequestMessage GetPatchDocumentHttpRequestMessage<TModel>(string route, JsonPatchDocument<TModel> patchDocument) where TModel : class
+        {
+            var method = new HttpMethod(PATCH);
+            var content = CreateRequestContent(patchDocument);
+            var request = new HttpRequestMessage(method, route) { Content = content };
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue(PATCHDOCCONTENTTYPE);
+            return request;
+        }
+
         protected virtual HttpContent CreateRequestContent<TBody>(TBody body)
             => new StringContent(SerializeObject(body), Encoding.UTF8, _contenttype);
         protected virtual string SerializeObject<TBody>(TBody body)

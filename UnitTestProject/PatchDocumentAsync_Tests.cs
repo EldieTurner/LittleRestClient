@@ -2,13 +2,14 @@
 using System.Net.Http;
 using System.Threading;
 using LittleRestClient;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace UnitTestProject
 {
     [TestClass]
-    public class PatchAsync_Tests
+    public class PatchDocumentAsync_Tests
     {
         [TestMethod]
         public void PatchAsync_Happy_Test()
@@ -22,14 +23,17 @@ namespace UnitTestProject
                 .ReturnsAsync(httpClientResponse);
             var config = new TestRestConfig();
             var restClient = new TestRestClient(config, httpClient.Object);
+            string newValue = nameof(newValue);
+            var doc = new JsonPatchDocument<SimpleTestObject>();
+            doc.Replace(x => x.TestProperty, newValue);
 
             //Act
-            var responseTask = restClient.PatchAsync<SimpleTestObject, SimpleTestObject>("TestObject", testObject);
+            var responseTask = restClient.PatchAsync<SimpleTestObject, SimpleTestObject>("TestObject", doc);
             var response = responseTask.GetAwaiter().GetResult();
 
             //Assert
             Assert.IsTrue(response.IsSuccessStatusCode);
-            Assert.AreEqual(response.Data.TestProperty, testObject.TestProperty);
+            httpClient.Verify(x => x.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]
@@ -43,9 +47,13 @@ namespace UnitTestProject
                 .ReturnsAsync(httpClientResponse);
             var config = new TestRestConfig();
             var restClient = new TestRestClient(config, httpClient.Object);
+            string newValue = nameof(newValue);
+            var doc = new JsonPatchDocument<SimpleTestObject>();
+            doc.Replace(x => x.TestProperty, newValue);
+
 
             //Act
-            var responseTask = restClient.PatchAsync<SimpleTestObject, SimpleTestObject>("TestObject", testObject);
+            var responseTask = restClient.PatchAsync<SimpleTestObject, SimpleTestObject>("TestObject", doc);
             var response = responseTask.GetAwaiter().GetResult();
 
             //Assert
@@ -65,9 +73,12 @@ namespace UnitTestProject
                 .ReturnsAsync(httpClientResponse);
             var config = new TestRestConfig();
             var restClient = new TestRestClient(config, httpClient.Object);
+            string newValue = nameof(newValue);
+            var doc = new JsonPatchDocument<SimpleTestObject>();
+            doc.Replace(x => x.TestProperty, newValue);
 
             //Act
-            var responseTask = restClient.PatchAsync("TestObject", testObject);
+            var responseTask = restClient.PatchAsync("TestObject", doc);
             var response = responseTask.GetAwaiter().GetResult();
 
             //Assert
@@ -86,14 +97,18 @@ namespace UnitTestProject
                 .ReturnsAsync(httpClientResponse);
             var config = new TestRestConfig();
             var restClient = new TestRestClient(config, httpClient.Object);
+            string newValue = nameof(newValue);
+            var doc = new JsonPatchDocument<SimpleTestObject>();
+            doc.Replace(x => x.TestProperty, newValue);
 
             //Act
-            var responseTask = restClient.PatchAsync("TestObject", testObject);
+            var responseTask = restClient.PatchAsync("TestObject", doc);
             var response = responseTask.GetAwaiter().GetResult();
 
             //Assert
             Assert.IsFalse(response.IsSuccessStatusCode);
             Assert.AreEqual(response.StatusCode, HttpStatusCode.InternalServerError);
         }
+
     }
 }
