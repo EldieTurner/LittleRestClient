@@ -18,3 +18,4 @@ script:
   - dotnet --version
   - dotnet restore
   - dotnet build LittleRestClient.sln --configuration Release /p:WarningLevel=0
+  - dotnet test UnitTestProject/UnitTestProject.csproj --configuration Release /p:WarningLevel=0
