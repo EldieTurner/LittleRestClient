@@ -1,6 +1,6 @@
 language: csharp
 mono: none
-dotnet: 2.0.0
+dotnet: 8.0.0
 script:
  - dotnet build LittleRestClient.sln
  - dotnet test ./UnitTestProject/UnitTestProject.csproj /p:CollectCoverage=true
