@@ -1,17 +1,10 @@
-using LittleRestClient;
+﻿using LittleRestClient;
 
-namespace UnitTestProject
+internal class TestRestConfig : IRestClientConfig
 {
-    public class TestRestConfig : IRestClientConfig
-    {
-        public string BaseUrl { get; set; } = "http://example.com";
-
-        public string ApiToken { get; }
-
-        public string UserAgent { get; }
-
-        public string ContentType { get; }
-
-        public string AcceptType { get; }
-    }
+    public string BaseUrl { get; set; } = "https://test.com/";
+    public string ContentType { get; set; } = "application/json";
+    public string UserAgent { get; set; } = "TestAgent";
+    public string AcceptType { get; set; } = "application/json";
+    public string ApiToken { get; set; }
 }
