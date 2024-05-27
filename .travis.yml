@@ -1,6 +1,20 @@
 language: csharp
 mono: none
-dotnet: 6.0.0
+os: linux
+
+env:
+  global:
+    - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
+    - DOTNET_CLI_TELEMETRY_OPTOUT=true
+
+install:
+  - wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+  - chmod +x ./dotnet-install.sh
+  - ./dotnet-install.sh -c 8.0 --install-dir $HOME/dotnet
+  - export PATH=$PATH:$HOME/dotnet
+  - export DOTNET_ROOT=$HOME/dotnet
+
 script:
- - dotnet build LittleRestClient.sln
- - dotnet test ./UnitTestProject/UnitTestProject.csproj /p:CollectCoverage=true
+  - dotnet --version
+  - dotnet build LittleRestClient/LittleRestClient.sln --framework net8.0
+  - dotnet test LittleRestClient/UnitTestProject.csproj --framework net8.0
