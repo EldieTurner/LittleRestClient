@@ -16,5 +16,5 @@ install:
 
 script:
   - dotnet --version
-  - dotnet build LittleRestClient/LittleRestClient.sln --framework net8.0
+  - dotnet build LittleRestClient.sln --framework net8.0
   - dotnet test LittleRestClient/UnitTestProject.csproj --framework net8.0
