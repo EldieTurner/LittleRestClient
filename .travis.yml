@@ -16,5 +16,7 @@ install:
 
 script:
   - dotnet --version
-  - dotnet build LittleRestClient.sln --framework net6.0
-  - dotnet test LittleRestClient/UnitTestProject.csproj --framework net6.0
+  - dotnet restore
+  - dotnet build LittleRestClient.sln --configuration Release
+  - dotnet test LittleRestClient/UnitTestProject.csproj --configuration Release
+  - dotnet pack LittleRestClient/LittleRestClient.csproj --configuration Release -o ./nupkgs
