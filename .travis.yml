@@ -10,6 +10,7 @@ env:
 install:
   - wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
   - chmod +x ./dotnet-install.sh
+  - ./dotnet-install.sh -c 6.0 --install-dir $HOME/dotnet
   - ./dotnet-install.sh -c 8.0 --install-dir $HOME/dotnet
   - export PATH=$PATH:$HOME/dotnet
   - export DOTNET_ROOT=$HOME/dotnet
