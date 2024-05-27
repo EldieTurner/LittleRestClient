@@ -18,5 +18,5 @@ script:
   - dotnet --version
   - dotnet restore
   - dotnet build LittleRestClient.sln --configuration Release /p:WarningLevel=0
-  - dotnet test LittleRestClient/UnitTestProject.csproj --configuration Release /p:WarningLevel=0 -v d
+  - dotnet test UnitTestProject/UnitTestProject.csproj --configuration Release /p:WarningLevel=0 -v d
   - dotnet pack LittleRestClient/LittleRestClient.csproj --configuration Release -o ./nupkgs
