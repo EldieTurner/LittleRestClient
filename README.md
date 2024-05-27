@@ -1,7 +1,7 @@
 # LittleRestClient 
 [![Build Status](https://travis-ci.org/EldieTurner/LittleRestClient.svg?branch=master)](https://travis-ci.org/EldieTurner/LittleRestClient)
 
-Working on an easy rest client compatible with .net core and standard 2.0.  It isn't designed to be a verbose solution.  If you just need to do basic calls to an api this should work great.
+Working on an easy rest client compatible with .net 6.0 and newer.  It isn't designed to be a verbose solution.  If you just need to do basic calls to an api this should work great.
 
 ## Installation
 
@@ -15,27 +15,49 @@ Available on [Nuget](https://www.nuget.org/packages/LittleRestClient/)
 
 ```dotnet add package LittleRestClient```
 
-## Constructors
+## Dependency Injection
 
-The simplest way to use LittleRestClient is pass the api's base url into the constructor.
+You can integrate LittleRestClient into your project using Dependency Injection with the provided methods in the DependencyInjection class.
+### Adding a Single RestClient
+To add a single `RestClient` with a base URL:
 ```csharp
-var restClient = new RestClient("http://example.com/api/");
-```
+using Microsoft.Extensions.DependencyInjection;
 
-There is also a constructor that takes an `IRestClientConfig` object.  You can implement this interface, and pass it into the constructor.
+var serviceCollection = new ServiceCollection();
+serviceCollection.AddSingleLittleRestClient("http://example.com/api/");
+var serviceProvider = serviceCollection.BuildServiceProvider();
+var restClient = serviceProvider.GetRequiredService<IRestClient>();
+```
+To add a single `RestClient` with a configuration object:
 ```csharp
-    public interface IRestClientConfig
-    {
-        string BaseUrl { get; } //Required eg "Https://example.com/api/"
-        string ApiToken { get; } //Blank by default
-        string UserAgent { get; } //"LittleRestClient"
-        string ContentType { get; } //"application/json"
-        string AcceptType { get; } //"application/json"
-    }
-```
+using Microsoft.Extensions.DependencyInjection;
 
+var config = new RestClientConfig 
+{ 
+    BaseUrl = "http://example.com/api/",
+    ApiToken = "your_api_token"
+};
+
+var serviceCollection = new ServiceCollection();
+serviceCollection.AddSingleLittleRestClient(config);
+var serviceProvider = serviceCollection.BuildServiceProvider();
+var restClient = serviceProvider.GetRequiredService<IRestClient>();
+```
 The only proeprty that is required is `BaseUrl`
+### Adding a RestClientFactory
+To add a `RestClientFactory` for creating multiple `RestClient` instances:
+```csharp
+using Microsoft.Extensions.DependencyInjection;
 
+var serviceCollection = new ServiceCollection();
+serviceCollection.AddLittleRestClientFactory();
+var serviceProvider = serviceCollection.BuildServiceProvider();
+var clientFactory = serviceProvider.GetRequiredService<IRestClientFactory>();
+
+var restClient1 = clientFactory.CreateClient("http://example.com/api/");
+var config = new RestClientConfig { BaseUrl = "http://example2.com/api/" };
+var restClient2 = clientFactory.CreateClient(config);
+```
 ## Public Methods
 All public methods are `Async` so they are all wrapped in a `Task`.  Also all public methods other than `GetStringAsync` return a `RestClientResponse` or `RestClientResponse<TResult>` object depending on the response expected. These objects have the following properties 
 ```csharp
