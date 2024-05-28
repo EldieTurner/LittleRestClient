@@ -16,25 +16,25 @@ public class RestClient : IRestClient, IDisposable
 
     public RestClient(string baseUrl, IHttpClientFactory httpClientFactory)
     {
-        if (string.IsNullOrWhiteSpace(baseUrl))
+        if (baseUrl.IsNullOrWhiteSpace())
             throw new ArgumentException($"{nameof(baseUrl)} is required");
         if (httpClientFactory is null)
             throw new ArgumentException($"{nameof(httpClientFactory)} is required");
 
         _defaultConfig.BaseUrl = baseUrl;
         Config = _defaultConfig;
-        _contenttype = !string.IsNullOrWhiteSpace(Config.ContentType) ? Config.ContentType : _defaultConfig.ContentType;
+        _contenttype = !Config.ContentType.IsNullOrWhiteSpace() ? Config.ContentType : _defaultConfig.ContentType;
         _httpClientFactory = httpClientFactory;
         InitializeHttpClient();
     }
 
     public RestClient(IRestClientConfig config, IHttpClientFactory httpClientFactory)
     {
-        if (string.IsNullOrWhiteSpace(config.BaseUrl))
+        if (config.BaseUrl.IsNullOrWhiteSpace())
             throw new ArgumentException($"{nameof(IRestClientConfig.BaseUrl)} is required");
 
         Config = config;
-        _contenttype = !string.IsNullOrWhiteSpace(Config.ContentType) ? Config.ContentType : _defaultConfig.ContentType;
+        _contenttype = !Config.ContentType.IsNullOrWhiteSpace() ? Config.ContentType : _defaultConfig.ContentType;
         _httpClientFactory = httpClientFactory;
         InitializeHttpClient();
     }
@@ -149,14 +149,18 @@ public class RestClient : IRestClient, IDisposable
     {
         if (_httpClient.DefaultRequestHeaders == null) return;
 
-        var userAgent = !string.IsNullOrWhiteSpace(Config.UserAgent) ? Config.UserAgent : _defaultConfig.UserAgent;
-        var acceptType = !string.IsNullOrWhiteSpace(Config.AcceptType) ? Config.AcceptType : _defaultConfig.AcceptType;
+        var userAgent = !Config.UserAgent.IsNullOrWhiteSpace() ? Config.UserAgent : _defaultConfig.UserAgent;
+        var acceptType = !Config.AcceptType.IsNullOrWhiteSpace() ? Config.AcceptType : _defaultConfig.AcceptType;
         _httpClient.DefaultRequestHeaders.Accept.Clear();
         _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(acceptType));
         _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", _contenttype);
-        if (!string.IsNullOrWhiteSpace(Config.ApiToken))
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Config.ApiToken);
+        if (!string.IsNullOrWhiteSpace(Config?.AuthorizationHeader?.Scheme) && !string.IsNullOrWhiteSpace(Config?.AuthorizationHeader?.Value))
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(Config.AuthorizationHeader.Scheme, Config.AuthorizationHeader.Value);
+        foreach(var header in Config.CustomHeaders.EmptyIfNull())
+        {
+            _httpClient.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
+        }
     }
 
     protected virtual HttpRequestMessage GetPatchHttpRequestMessage<TBody>(string route, TBody body)

@@ -7,4 +7,6 @@ internal class TestRestConfig : IRestClientConfig
     public string UserAgent { get; set; } = "TestAgent";
     public string AcceptType { get; set; } = "application/json";
     public string ApiToken { get; set; }
+    public AuthorizationHeader AuthorizationHeader { get; set; }
+    public Dictionary<string, string> CustomHeaders { get; set; }
 }
