@@ -1,21 +1,29 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.2.1.2</Version>
-    <Authors>Eldie Turner</Authors>
-    <Company>Eldie Turner</Company>
-    <Description>This is a basic rest client for interacting with APIs.  It offers the basic functions and is compatable with .net standard 2.0 and .net core 2.0.</Description>
-    <PackageProjectUrl>https://github.com/EldieTurner/LittleRestClient</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/EldieTurner/LittleRestClient</RepositoryUrl>
-    <RepositoryType>Git</RepositoryType>
-    <PackageTags>RestClient, Little Rest Client, Easy Rest Client, SImple Rest Client,</PackageTags>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <AssemblyVersion>1.2.1.2</AssemblyVersion>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>Eldie Turner</Authors>
+		<Company>Dead Simple Solutions llc</Company>
+		<PackageId>LittleRestClient</PackageId>
+		<Version>1.9.1</Version>
+		<Description>A .NET library for making simple rest calls</Description>
+		<PackageTags>rest client http</PackageTags>
+		<RepositoryUrl>https://github.com/EldieTurner/LittleRestClient</RepositoryUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
   </ItemGroup>
-
+	<ItemGroup>
+		<None Include="LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+		<None Update="README.md">
+			<Pack>true</Pack>
+			<PackagePath>README.md</PackagePath>
+		</None>
+	</ItemGroup>
 </Project>
