@@ -1,5 +1,5 @@
 # LittleRestClient 
-[![Build Status](https://travis-ci.org/EldieTurner/LittleRestClient.svg?branch=master)](https://travis-ci.org/EldieTurner/LittleRestClient)
+[![.NET Core CI](https://github.com/EldieTurner/LittleRestClient/actions/workflows/default.yaml/badge.svg)](https://github.com/EldieTurner/LittleRestClient/actions/workflows/default.yaml)
 
 Working on an easy rest client compatible with .net 6.0 and newer.  It isn't designed to be a verbose solution.  If you just need to do basic calls to an api this should work great.
 
