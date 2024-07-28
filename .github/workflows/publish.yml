@@ -1,0 +1,44 @@
+name: Publish NuGet Package
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v2
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'  # Ensure this matches your project's .NET version
+
+    - name: Install dependencies
+      run: dotnet restore LittleRestClient/LittleRestClient.sln
+
+    - name: Increment version
+      run: |
+        $csprojPath = "LittleRestClient/LittleRestClient.csproj"
+        [xml]$csproj = Get-Content $csprojPath
+        $versionNode = $csproj.Project.PropertyGroup.Version
+        if ($versionNode -eq $null) {
+          Write-Host "No <Version> element found in $csprojPath. Please ensure your project file has a <Version> element."
+          exit 1
+        }
+        $versionParts = $versionNode.Split('.')
+        $versionParts[2] = [int]$versionParts[2] + 1  # Increment the patch version
+        $newVersion = $versionParts -join '.'
+        $csproj.Project.PropertyGroup.Version = $newVersion
+        $csproj.Save($csprojPath)
+      shell: pwsh
+
+    - name: Pack NuGet package
+      run: dotnet pack LittleRestClient/LittleRestClient.csproj --configuration Release --no-build --output ./nupkg
+
+    - name: Publish to NuGet.org
+      env:
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      run: dotnet nuget push ./nupkg/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_API_KEY
